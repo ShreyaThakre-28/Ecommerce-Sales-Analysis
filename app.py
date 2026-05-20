@@ -1,9 +1,19 @@
 import streamlit as st
+import pandas as pd
 
-st.title("E-Commerce Sales App")
+st.title("Sales Dashboard")
 
-year = st.selectbox("Select Year", [2016, 2017, 2018])
+file = st.file_uploader("Upload CSV File")
 
-sales = 15000
+if file:
+    df = pd.read_csv(file)
 
-st.write("Total Sales:", sales)
+    year = st.selectbox("Select Year", df["Year"].unique())
+
+    filtered_df = df[df["Year"] == year]
+
+    sales = filtered_df["Sales"].sum()
+    profit = filtered_df["Profit"].sum()
+
+    st.metric("Total Sales", sales)
+    st.metric("Total Profit", profit)
