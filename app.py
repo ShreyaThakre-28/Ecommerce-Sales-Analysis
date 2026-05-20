@@ -1,19 +1,23 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Sales Dashboard")
-
-file = st.file_uploader("Upload CSV File")
+file = st.file_uploader("Upload CSV")
 
 if file:
     df = pd.read_csv(file)
 
-    year = st.selectbox("Select Year", df["Year"].unique())
+    st.write("Columns:", df.columns)
 
-    filtered_df = df[df["Year"] == year]
+    if "Year" in df.columns:
 
-    sales = filtered_df["Sales"].sum()
-    profit = filtered_df["Profit"].sum()
+        year = st.selectbox(
+            "Select Year",
+            df["Year"].unique()
+        )
 
-    st.metric("Total Sales", sales)
-    st.metric("Total Profit", profit)
+        filtered_df = df[df["Year"] == year]
+
+        st.write(filtered_df)
+
+    else:
+        st.error("Year column not found!")
